@@ -3,5 +3,5 @@ export default function(mongoose){
 	//so we can use await/async stuff.
 	mongoose.Promise =  global.Promise
 	// connect database
-	mongoose.connect(process.env.DB_URL, {useMongoClient: true})
+	mongoose.connect(process.env.DB_URL)
 }

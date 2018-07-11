@@ -105,3 +105,15 @@ export const setToArray = (s) => {
  * @param {*} req
  */
 export const getToken = (req) => req.get('authorization').split(' ')[1]
+
+/**
+ * Return a json object on the response stream.
+ * @param {Object} res - Response stream.
+ * @param {Integer} code - HTTP status code.
+ * @param {*} msg - Message object.
+ */
+export const jsonResponse = (res, code, msg) => res.status(code).json(msg)
+
+export const isUser = ({access}) => access == 0
+export const isSysUser = ({access}) => access > 5
+export const  isSysAdmin = ({access}) => access == 9

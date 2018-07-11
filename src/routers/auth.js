@@ -1,42 +1,56 @@
 import express from 'express'
-import {getToken, createApiToken, validateToken, hashPassword, inflateId} from '../utils'
+import {jsonResponse, getToken, createApiToken, validateToken, hashPassword, inflateId} from '../utils'
+import { CLIENT_RENEG_WINDOW } from 'tls';
 
 
-const fail = (res, code, msg) => res.status(code).json(msg)
-
-const makeRouter = ({User}) => {
+const makeRouter = ({Account, Company, Recruit}) => {
 	const router = express.Router()
 	router.post(`/login`, async (req, res) => {
-		if (!req.body.password || !req.body.student_id)
-			return fail(res, 422, `No password or student_id provided.`)
+		if (!req.body.password || !req.body.email)
+			return json(res, 422, `No password or email provided.`)
 		
 		req.body.password = hashPassword(req.body.password)
-		const user = await User.findOne(req.body)
+		const account = await Account.findOne(req.body)
 
-		if (!user)
-			return fail(res, 403, `Invalid login credentials.`)
+		if (!account)
+			return jsonResponse(res, 403, `Invalid login credentials.`)
 
-		const _id = user._id.toString()
+		const _id = account._id.toString()
 		const ua = req.get(`user-agent`)
 		res.json(createApiToken(_id, ua))
 	})
 
-	router.post(`/register`, async (req, res) => {
-		if (!req.body.password || !req.body.student_id || !req.body.name)
-			return fail(res, 422, `Requires name, password, student_id fields to be provided.`)
-	
-		req.body.password = hashPassword(req.body.password)
+	router.post(`/account/new`, async (req, res) => {
+		if(!req.body.account || !(req.body.recruit || req.body.company))
+			return json(res, 422, `Invalid request format.`)
 		
-		try {
-			const user = await new User(req.body).save()
-			const _id = user._id.toString()
+		const account_data = req.body.account
+		account_data.password = hashPassword(account_data.password) 
+		
+		try{
+			const account = await new Account(req.body.account).save()
+			const _id = account._id.toString()
 			const ua = req.get(`user-agent`)
-			
-			res.status(201).json(createApiToken(_id, ua))
-		} catch (e){
-			return fail(res, 401, `Duplicate student number.`)
+
+			if(req.body.recruit){
+				const recruit = await new Recruit(req.body.recruit).save()
+				account.profile.recruit = recruit 
+				await account.save()
+				json(res, 201, createApiToken(account._id.to))
+			}else{
+				const company = await new Company(req.body.company).save()
+				account.profile.company = company
+				company.accounts.admin = account._id
+				await account.save()
+				await company.save()
+			}
+
+			return jsonResponse(res, 201, createApiToken(_id, ua))
+		} catch(e){
+			console.log(e)
+			return jsonResponse(res, 401, `A user with that email already exists.`)	
 		}
-	})
+	})	
 
 	router.all(`/refresh`, async (req, res) => {
 		try {
@@ -48,7 +62,7 @@ const makeRouter = ({User}) => {
 
 			res.json(createApiToken(payload._id, payload.ua))
 		} catch (err){
-			fail(res, 403, `Invalid token.`)
+			jsonResponse(res, 403, `Invalid token.`)
 		}
 	})
 

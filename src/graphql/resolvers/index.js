@@ -1,15 +1,17 @@
-import events from './events'
-import modules from './modules'
-import venues from './venues'
-import users from './users'
-import timetables from './timetables'
+import account from './account'
+import company from './company'
+import document from './document'
+import industry from './industry'
+import question from './question'
+import recruit from './recruit'
 
 const resolvers = [
-	modules,
-	events,
-	venues,
-	users,
-	timetables
+	account,
+	company,
+	document,
+	industry,
+	question,
+	recruit
 ]
 
 const makeMutation = resolvers => resolvers.reduce(

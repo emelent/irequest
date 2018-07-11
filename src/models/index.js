@@ -1,8 +1,9 @@
 
 module.exports = {
-	Event: require('./event'),
-	Module: require('./module'),
-	Timetable: require('./timetable'),
-	User: require('./user'),
-	Venue: require('./venue')
+	Account: require('./account'),
+	Company: require('./company'),
+	Document: require('./document'),
+	Industry: require('./industry'),
+	Question: require('./question'),
+	Recruit: require('./recruit')
 }

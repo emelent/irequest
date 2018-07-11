@@ -7,9 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-	"start": "nodemon --exec babel-node scripts/server.dev.js --watch ./src",
+    "start": "nodemon --exec babel-node scripts/server.dev.js --watch ./src",
     "prod": "babel-node scripts/server.prod.js",
-	"prep": "babel-node scripts/prepare.js",
+    "prep": "babel-node scripts/prepare.js",
     "seed": "babel-node scripts/seed.js",
     "test": "NODE_ENV=test npm run seed:raw && npm run test:raw | tap-spec",
     "test:raw": "NODE_ENV=test tape -r babel-register -r babel-polyfill -r ./tests/config.js ./tests/**/*.spec.js",
@@ -38,6 +38,7 @@
     "babel-jest": "^23.2.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-2": "^6.24.1",
     "eslint": "^5.0.1",
     "jest": "^23.3.0",
     "nodemon": "^1.17.5",

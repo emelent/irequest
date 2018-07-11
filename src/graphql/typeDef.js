@@ -1,205 +1,221 @@
 //GraphQL Type Definitions
 
 export default `
-type Module {
-	_id: ID!
-	name: String!
-	code: String!
-	lessons: Int!
-	period: String!
+type Profile {
+	company: ID
+	recruit: ID
 }
 
-type Event {
+type Account {
 	_id: ID!
-	name: String!
-	module_id: ID!
-	day: String!
-	start: String!
-	end: String!
-	venue: String
-	language: String!
-	group: String
-	author_id: ID
-	date: String
+	email: String!
+	profile: Profile!
 }
 
-type Timetable{
+type QA{
+	question_id: ID!
+	response: String!
+}
+
+type Question{
 	_id: ID!
-	author_id: ID!
-	events: [ID!]!
-	modules: [ID!]!
+	question: String!
+	industry_id: ID!
+}
+
+type Recruit {
+	name: String!
+	surname: String!
+	dob: Date!
+	province: String!
+	city: String!
+	gender: Boolean!
+	disability: String
+	vid1_url: String!
+	vid2_url: String!
+	industry_id: ID!
+	qa1: QA!
+	qa2: QA!
+}
+
+type CompanyAdmin {
+	admin: ID!
+	users: [ID]
+}
+
+type Company {
+	name: String!
+	verified: Boolean!
+	industry_id: ID!
+	address: String!
+	email: String!
+	telephone: String!
+	logo_url: String
+	reg_num: String
+	tax_num: String
+	vat_num: String
+	bee_level: String
+	accounts: CompanyAdmin
+}
+
+type Document {
+	_id: ID!
+	profile_id: ID!
+	type: Integer!
+	url: String!
+}
+
+type Industry {
+	_id: ID!
 	name: String!
 }
 
-type TimetableAlias{
-	timetable_id: ID!
-	alias: String!
-}
-
-type User {
-	_id: ID!
-	name: String!
-	student_id: String!
-	modules: [ID]
-	active_timetable: ID
-	timetables: [ID]
-	timetable_aliases: [TimetableAlias]
-}
-type Venue {
-	_id: ID!
-	name: String!
-}
 
 type Query {
-	# Return all venues
-	venues:[Venue!]!
-	# Return venue by _id or name
-	venue(
-		name:String
-		_id: ID
-	): Venue
-	
-	# Return module by code or _id
-	module(
-		_id: String
-		code: String
-	): Module
-	# Return all modules
-	modules(
+
+	questions(
+		industry_id: ID
+	): [Question!]
+
+	accounts(
+		email: String
+	): [Account!]
+	companies(
 		name: String
-		code: String
-		period: String
-		lessons: Int
-	): [Module]!
-	# Resolve module ids
-	resolveModules(
-		modules: [ID]
-	): [Module]!
+		verified: Boolean
+		industry_id: ID
+		address: String
+		email: String
+		telephone: String
+		reg_num: String
+		tax_num: String
+		vat_num: String
+		bee_level: String
+	): [Company!]
 
-	# Return event by _id
-	event(_id:ID!): Event
-	# Return events
-	events(
+	recruits(
 		name: String
-		module_id: ID
-		day: String
-		start: String
-		end: String
-		venue: String
-		language: String
-		group: String
-		author_id: ID
-		date: String
-	):  [Event]!
-	# Resolve event ids
-	resolveEvents(
-		events: [ID]
-	): [Event]!
+		surname: String
+		province: String
+		city: String
+		disability: String
+		phone: String
+		dob: Date
+		industry_id: ID
+		min_age: Integer
+		max_age: Integer
+	): [Recruit!]
+	industries(
+		name: String
+	): [Industry!]
 
-	# Return user by _id and/or student_id
-	user(
-		_id: ID
-	): User
-	# Return all users
-	users: [User]!
-
-	# Return timetables that have specified modules
-	timetablesByModules(
-		modules: [ID]!
-		strict: Boolean
-	): [Timetable]!
-
-	# Return timetables by author
-	timetablesByAuthor(
-		author_id: ID!
-	): [Timetable]!
-
-	# Return all timetables
-	timetables:[Timetable]!
-
-	# Resolve module ids
-	resolveTimetables(
-		timetables: [ID]
-	): [Timetable]!
+	documents(
+		profile_id: ID
+		type: Integer
+	): [Document!]
 }
 
+
 type Mutation {
-	createVenue(name:String!): Venue!
-	updateVenue(
-		_id: ID!
-		name:String!
-	): Venue
-	deleteVenue(_id: ID!): Venue
+	create_question(
+		industry_id: ID!
+		question: String!
+	): Question
+	update_question(
+		question_id: ID!
+		industry_id: ID
+		question: String
+	): Question
+	remove_question(
+		question_id: ID!
+	): Question
 
-	createModule(
+
+	create_company(
 		name: String!
-		code: String!
-		period: String!
-		lessons: Int!
-	): Module!
-	updateModule(
-		_id:  ID!
+		industry_id: ID!
+		address: String!
+		email: String!
+		telephone: String!
+		logo_url: String
+		reg_num: String
+		tax_num: String
+		vat_num: String
+		bee_level: String
+	): Company
+	update_company(
 		name: String
-		code: String
-		period: String
-		lessons: Int
-	): Module
-	deleteModule(_id: ID!): Module
-
-
-	createEvent(	
-		name: String!
-		day: String!
-		start: String!
-		end: String!
-		language: String!
-		group: String
-		venue: String
-		date: String
-		author_id: ID
-		module_id: ID
-	): Event!
-	updateEvent(
-		_id: ID!	
-		name: String
-		module_id: ID
-		day: String
-		venue: String
-		start: String
-		end: String
-		language: String
-		group: String
-		author_id: ID
-		date: String
-	): Event
-	deleteEvent(_id: ID!): Event
-
-	updateUser(
-		_id: ID!
-		group: String
-		name: String
-		modules: [ID]
-		timetables: [ID]
-	): User
-	updatePassword(
-		_id: ID!
-		password: String!
-		new_password: String!
-	): String
-	deleteUser(_id: ID!): User
-
-	createTimetable(
-		name: String!
-	): Timetable!
-	deleteTimetable(
-		_id: ID!
-	): Timetable
-	updateTimetable(
-		_id: ID!
-		events: [ID]
-		alias: String
-	): Timetable
+		industry_id: ID
+		address: String
+		email: String
+		telephone: String
+		logo_url: String
+		reg_num: String
+		tax_num: String
+		vat_num: String
+		bee_level: String	
+		admin: ID
+		users: [ID]	
+	): Company
+	remove_company: Company
 	
+
+	create_recruit(
+		name: String!
+		surname: String!
+		province: String!
+		city: String!
+		phone: String!
+		vid1_url: String!
+		vid2_url: String!
+		dob: Date!
+		industry_id: ID!
+		qa1: QA!
+		qa2: QA!
+		disability: String
+	): Recruit
+	update_recruit(
+		name: String
+		surname: String
+		province: String
+		city: String
+		phone: String
+		vid1_url: String
+		vid2_url: String
+		dob: Date
+		industry_id: ID
+		qa1: QA
+		qa2: QA
+		disability: String		
+	): Recruit
+	remove_recruit(): Recruit
+
+
+	create_document(
+		type: Integer!
+		profile_id: ID!
+		url: String!
+	): Document
+	update_document(
+		document_id: ID!
+		type: Integer
+		url: String
+	): Document
+	remove_document(
+		document_id: ID!
+	): Document
+	
+
+	create_industry(
+		name: String!
+	): Industry
+	update_industry(
+		industry_id: ID!
+		name: String!
+	): Industry
+	remove_industry(
+		industry_id: ID
+	): Industry
 }
 
 `
