@@ -17,6 +17,15 @@ export default {
 						return null
 				}
 				
+				args.qa1 = {
+					question_id: inflateId(args.qa1_id),
+					response: args.qa1_response
+				}
+				
+				args.qa2 = {
+					question_id: inflateId(args.qa2_id),
+					response: args.qa2_response
+				}
 				const recruits = await Recruit.find(args)
 
 				//TODO implement filter by age

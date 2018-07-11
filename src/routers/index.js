@@ -3,8 +3,7 @@ import {graphiqlExpress} from 'apollo-server-express'
 import bodyParser from 'body-parser'
 
 import models from '../models'
-import makeAccountRouter from './account'
-import makeProfileRouter from './profile'
+import makeAuthRouter from './auth'
 import makeGraphqlRouter from './graphql'
 
 //cors middleware
@@ -24,9 +23,7 @@ app.use(cors)
 app.use(bodyParser.json())
 
 //attach authentication router
-app.use('/account', makeAuthRouter(models))
-
-app.use('/profile', makeProfileRouter(models))
+app.use('/auth', makeAuthRouter(models))
 
 //attach graphql router
 app.use('/graphql', makeGraphqlRouter(models))

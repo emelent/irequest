@@ -1,6 +1,5 @@
 import express from 'express'
 import {jsonResponse, getToken, createApiToken, validateToken, hashPassword, inflateId} from '../utils'
-import { CLIENT_RENEG_WINDOW } from 'tls';
 
 
 const makeRouter = ({Account, Company, Recruit}) => {
@@ -16,11 +15,12 @@ const makeRouter = ({Account, Company, Recruit}) => {
 			return jsonResponse(res, 403, `Invalid login credentials.`)
 
 		const _id = account._id.toString()
+		console.log(`_id => "${_id}`)
 		const ua = req.get(`user-agent`)
 		res.json(createApiToken(_id, ua))
 	})
 
-	router.post(`/account/new`, async (req, res) => {
+	router.post(`/signup`, async (req, res) => {
 		if(!req.body.account || !(req.body.recruit || req.body.company))
 			return json(res, 422, `Invalid request format.`)
 		
@@ -57,8 +57,8 @@ const makeRouter = ({Account, Company, Recruit}) => {
 			const payload = validateToken(getToken(req), {ignoreExpiration: true})
 			if (payload.ua  !== req.get('user-agent')) throw ''
 		
-			const user = await User.findById(inflateId(payload._id))
-			if (!user) throw ''
+			const account = await Account.findById(inflateId(payload._id))
+			if (!account) throw ''
 
 			res.json(createApiToken(payload._id, payload.ua))
 		} catch (err){

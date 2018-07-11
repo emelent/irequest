@@ -26,7 +26,7 @@ type Question{
 type Recruit {
 	name: String!
 	surname: String!
-	dob: Date!
+	dob: String!
 	province: String!
 	city: String!
 	gender: Boolean!
@@ -61,7 +61,7 @@ type Company {
 type Document {
 	_id: ID!
 	profile_id: ID!
-	type: Integer!
+	type: Int!
 	url: String!
 }
 
@@ -100,10 +100,10 @@ type Query {
 		city: String
 		disability: String
 		phone: String
-		dob: Date
+		dob: String
 		industry_id: ID
-		min_age: Integer
-		max_age: Integer
+		min_age: Int
+		max_age: Int
 	): [Recruit!]
 	industries(
 		name: String
@@ -111,7 +111,7 @@ type Query {
 
 	documents(
 		profile_id: ID
-		type: Integer
+		type: Int
 	): [Document!]
 }
 
@@ -168,10 +168,12 @@ type Mutation {
 		phone: String!
 		vid1_url: String!
 		vid2_url: String!
-		dob: Date!
+		dob: String!
 		industry_id: ID!
-		qa1: QA!
-		qa2: QA!
+		q1_id: ID
+		q1_response: String
+		q2_id: ID
+		q2_response: String
 		disability: String
 	): Recruit
 	update_recruit(
@@ -182,23 +184,26 @@ type Mutation {
 		phone: String
 		vid1_url: String
 		vid2_url: String
-		dob: Date
+		dob: String
 		industry_id: ID
-		qa1: QA
-		qa2: QA
+		q1_id: ID
+		q1_response: String
+		q2_id: ID
+		q2_response: String
+		
 		disability: String		
 	): Recruit
-	remove_recruit(): Recruit
+	remove_recruit: Recruit
 
 
 	create_document(
-		type: Integer!
+		type: Int!
 		profile_id: ID!
 		url: String!
 	): Document
 	update_document(
 		document_id: ID!
-		type: Integer
+		type: Int
 		url: String
 	): Document
 	remove_document(

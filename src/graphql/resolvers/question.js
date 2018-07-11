@@ -3,18 +3,22 @@ import {inflateId, isHex24, getToken, validateToken, isSysUser} from '../../util
 
 export default {
 	Query: {
-		questions: async (parent, args, {req, Question}) => {
+		questions: async (parent, args, {req, Account, Question}) => {
 			try{
 				const payload= validateToken(getToken(req))
 				if (payload.ua !== req.get('user-agent')) throw `User-Agent mismatch.`
 
-				const account = await Question.findById(inflateId(payload._id))
+				const account = await Account.findById(inflateId(payload._id))
+				if(!account)
+					throw `Invalid id => "${payload._id}"`
 				if(!isSysUser(account))
-					return null
-				
-				args.industry_id = inflateId(args.industry_id) 
+					throw `Not SysUser!`
+
+				if(args.industry_id)
+					args.industry_id = inflateId(args.industry_id) 
+					
 				const questions = await Question.find(args)
-				return accounts.map(gqlQuestion)
+				return questions.map(gqlQuestion)
 			} catch(e){
 				console.log(e)
 				return null

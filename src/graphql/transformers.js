@@ -16,7 +16,9 @@ export const gqlAccount = account => account
 export const gqlCompany = company => company
 export const gqlDocument = doc => doc
 export const gqlIndustry = industry => industry
-export const gqlRecruit = recruit => recruit
+export const gqlRecruit = recruit => {
+	recruit.dob = recruit.dob.toDateString()
+}
 export const gqlQuestion = question => question
 
 

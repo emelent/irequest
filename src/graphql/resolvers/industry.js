@@ -3,7 +3,7 @@ import {inflateId, isHex24, getToken, validateToken, isSysUser} from '../../util
 
 export default {
 	Query: {
-		industries: async(parent, args, {req, Industries}) => {
+		industries: async(parent, args, {req, Industry}) => {
 			const industries = await Industry.find(args)
 			return industries.map(gqlIndustry)
 		}
@@ -13,11 +13,15 @@ export default {
 			try{
 				const payload= validateToken(getToken(req))
 				if (payload.ua !== req.get('user-agent')) throw `User-Agent mismatch.`
-
-				const account = await Account.findById(inflateId(payload._id))
-				if(!isSysUser(account))
-					return null
 				
+				const account = await Account.findById(inflateId(payload._id))
+				if(!account)
+					throw `Invalid id => "${payload._id}"`
+				if(!isSysUser(account))
+					throw `Not SysUser!`
+				
+				
+
 				const industry = await new Industry(args).save()
 				return gqlIndustry(industry)
 			} catch(e){
@@ -41,7 +45,7 @@ export default {
 				return null
 			}
 		},
-		create_industry: async (parent, args, {req, Account, Industry}) => {
+		remove_industry: async (parent, args, {req, Account, Industry}) => {
 			try{
 				const payload= validateToken(getToken(req))
 				if (payload.ua !== req.get('user-agent')) throw `User-Agent mismatch.`
@@ -58,6 +62,6 @@ export default {
 				console.log(e)
 				return null
 			}
-		},
+		}
 	}
 }
