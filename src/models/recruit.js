@@ -31,8 +31,7 @@ const schema = new mongoose.Schema({
 		required: true
 	},
 	disability: {
-		type: String,
-		required: true
+		type: String
 	},
 	phone: {
 		type: String,

@@ -22,7 +22,7 @@ const makeRouter = ({Account, Company, Recruit}) => {
 
 	router.post(`/signup`, async (req, res) => {
 		if(!req.body.account || !(req.body.recruit || req.body.company))
-			return json(res, 422, `Invalid request format.`)
+			return jsonResponse(res, 422, `Invalid request format.`)
 		
 		const account_data = req.body.account
 		account_data.password = hashPassword(account_data.password) 
@@ -36,7 +36,7 @@ const makeRouter = ({Account, Company, Recruit}) => {
 				const recruit = await new Recruit(req.body.recruit).save()
 				account.profile.recruit = recruit 
 				await account.save()
-				json(res, 201, createApiToken(account._id.to))
+				jsonResponse(res, 201, createApiToken(account._id.to))
 			}else{
 				const company = await new Company(req.body.company).save()
 				account.profile.company = company
