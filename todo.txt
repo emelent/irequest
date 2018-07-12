@@ -1,0 +1,4 @@
+TODO
+
+	- keep track of tokens, so they can be deauthenticated, one token per ua
+	- add unit tests
