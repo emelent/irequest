@@ -1,7 +1,7 @@
 import {config} from 'dotenv'
 import mongoose from 'mongoose'
 import configureMongoose from '../src/mongoose.config'
-import {Industry, Account, Question} from '../src/models'
+import {Industry, Account, Question, Recruit} from '../src/models'
 import {hashPassword} from '../src/utils'
 
 // set up environment
@@ -39,6 +39,7 @@ async function seed(){
 		await Account.remove()
 		await Industry.remove()
 		await Question.remove()
+		await Recruit.remove()
 		
 		await data.industry.map(async i => {
 			await new Industry(i).save()
