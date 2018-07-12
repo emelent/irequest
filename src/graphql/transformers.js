@@ -18,6 +18,7 @@ export const gqlDocument = doc => doc
 export const gqlIndustry = industry => industry
 export const gqlRecruit = recruit => {
 	recruit.dob = recruit.dob.toDateString()
+	return recruit
 }
 export const gqlQuestion = question => question
 
