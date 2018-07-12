@@ -35,6 +35,7 @@ type Recruit {
 	vid1_url: String!
 	vid2_url: String!
 	industry_id: ID!
+	phone: String!
 	qa1: QA!
 	qa2: QA!
 	age: Int!
