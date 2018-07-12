@@ -28,6 +28,9 @@ const schema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
+	website_url: {
+		type: String
+	},
 	logo_url:  {
 		type: String
 	},
@@ -48,7 +51,8 @@ const schema = new mongoose.Schema({
 		default: {
 			admin: null,
 			users: []
-		}
+		},
+		required: true
 	}
 })
 

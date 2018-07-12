@@ -1,14 +1,16 @@
 import {gqlCompany} from '../transformers'
-import {inflateId, isHex24} from '../../utils'
+import {inflateId, getToken, validateToken, isSysUser} from '../../utils'
 
 export default {
 	Query: {
-		companies: async (parent, args, {req, Company}) => {
+		companies: async (parent, args, {req, Company, Account}) => {
 			try{
 
 				const payload= validateToken(getToken(req))
 				if (payload.ua !== req.get('user-agent')) throw `User-Agent mismatch.`
-
+				const account = await Account.findById(inflateId(payload._id))
+				if(!isSysUser(account))
+					throw `Not a SysUser.`
 				const companies = await Company.find(args)
 				return companies.map(gqlCompany)
 			}catch (e){
