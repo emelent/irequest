@@ -17,18 +17,22 @@ export default {
 						return null
 				}
 				
-				args.qa1 = {
-					question_id: inflateId(args.qa1_id),
-					response: args.qa1_response
+				if(args.qa1_id){
+					args.qa1 = {
+						question_id: inflateId(args.qa1_id),
+						response: args.qa1_response
+					}
 				}
-				
-				args.qa2 = {
-					question_id: inflateId(args.qa2_id),
-					response: args.qa2_response
+				if(args.qa2_id){
+					args.qa2 = {
+						question_id: inflateId(args.qa2_id),
+						response: args.qa2_response
+					}
 				}
 				const recruits = await Recruit.find(args)
 
-				//TODO implement filter by age
+				// TODO implement filter by age
+
 				return recruits.map(gqlRecruit)
 			} catch(e){
 				console.log(e)
@@ -45,6 +49,18 @@ export default {
 				const account = await Account.findById(inflateId(payload._id))
 				if(account.profile.recruit)
 					throw  `Account already has a recruit profile.`
+				args.industry_id = inflateId(industry_id)
+				args.qa1 = {
+					question_id: inflateId(args.qa1_id),
+					response: args.qa1_response
+				}
+				
+				args.qa2 = {
+					question_id: inflateId(args.qa2_id),
+					response: args.qa2_response
+				}
+				
+				
 				const recruit = await new Recruit(args).save()
 				account.profile.recruit = recruit._id
 				await account.save()
