@@ -169,11 +169,11 @@ async function seed(){
 			industry_id: pickRandom(industries)._id,
 			qa1:{
 				question_id: pickRandom(questions)._id,
-				response: r.response
+				response: r.qa1.response
 			},
 			qa2:{
 				question_id: pickRandom(questions)._id,
-				response: r.response
+				response: r.qa2.response
 			}
 		}))
 		let rprofiles = await Recruit.create(r_data)
