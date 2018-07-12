@@ -28,19 +28,30 @@ const makeRouter = ({Account, Company, Recruit}) => {
 		account_data.password = hashPassword(account_data.password) 
 		
 		try{
+
+			// prevent pre-adminifying
+			req.body.account.access = 0
+
 			const account = await new Account(req.body.account).save()
 			const _id = account._id.toString()
 			const ua = req.get(`user-agent`)
 
 			if(req.body.recruit){
+				req.body.recruit.qa1.question_id  = inflateId(req.body.recruit.qa1.question_id)
+				req.body.recruit.qa2.question_id  = inflateId(req.body.recruit.qa2.question_id)
 				const recruit = await new Recruit(req.body.recruit).save()
-				account.profile.recruit = recruit 
+				account.profile.recruit = recruit
+				console.log(account.profile.recruit.qa1)
 				await account.save()
-				jsonResponse(res, 201, createApiToken(account._id.to))
 			}else{
+				// prevent pre-verifying
+				req.body.company.verified = false
+				req.body.company.accounts = {
+					admin: account._id,
+					users: []
+				}
 				const company = await new Company(req.body.company).save()
 				account.profile.company = company
-				company.accounts.admin = account._id
 				await account.save()
 				await company.save()
 			}
