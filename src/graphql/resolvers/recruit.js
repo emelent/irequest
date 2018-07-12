@@ -3,6 +3,24 @@ import {inflateId, isHex24, getToken, validateToken, isSysUser} from '../../util
 
 export default {
 	Query: {
+		recruit: async (parent, args, {req, Recruit, Account}) => {
+			try{
+
+				const payload= validateToken(getToken(req))
+				if (payload.ua !== req.get('user-agent')) throw `User-Agent mismatch.`
+				const account = await Account.findById(inflateId(payload._id))
+				if(!account)
+					throw `Invalid token.`
+				if(!account.profile.recruit)
+					throw `Account has no linked recruit profile.`
+
+				const recruit = await Recruit.findById(account.profile.recruit)
+				return gqlRecruit(recruit)
+			}catch (e){
+				console.log(e)
+				return null
+			}
+		},
 		recruits: async (parent, args, {req, Company, Recruit, Account}) => {
 			try{
 				const payload= validateToken(getToken(req))

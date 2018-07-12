@@ -82,6 +82,8 @@ type Query {
 	accounts(
 		email: String
 	): [Account!]
+
+	company: Company
 	companies(
 		name: String
 		verified: Boolean
@@ -95,6 +97,7 @@ type Query {
 		bee_level: String
 	): [Company!]
 
+	recruit: Recruit
 	recruits(
 		name: String
 		surname: String

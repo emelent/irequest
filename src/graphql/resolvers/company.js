@@ -3,12 +3,32 @@ import {inflateId, getToken, validateToken, isSysUser} from '../../utils'
 
 export default {
 	Query: {
+		company: async (parent, args, {req, Company, Account}) => {
+			try{
+
+				const payload= validateToken(getToken(req))
+				if (payload.ua !== req.get('user-agent')) throw `User-Agent mismatch.`
+				const account = await Account.findById(inflateId(payload._id))
+				if(!account)
+					throw `Invalid token.`
+				if(!account.profile.company)
+					throw `Account has no linked company profile.`
+
+				const company = await Company.findById(account.profile.company)
+				return gqlCompany(company)
+			}catch (e){
+				console.log(e)
+				return null
+			}
+		},
 		companies: async (parent, args, {req, Company, Account}) => {
 			try{
 
 				const payload= validateToken(getToken(req))
 				if (payload.ua !== req.get('user-agent')) throw `User-Agent mismatch.`
 				const account = await Account.findById(inflateId(payload._id))
+				if(!account)
+					throw `Invalid token.`
 				if(!isSysUser(account))
 					throw `Not a SysUser.`
 				const companies = await Company.find(args)
