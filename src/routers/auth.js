@@ -40,9 +40,10 @@ const makeRouter = ({Account, Company, Recruit}) => {
 				req.body.recruit.qa1.question_id  = inflateId(req.body.recruit.qa1.question_id)
 				req.body.recruit.qa2.question_id  = inflateId(req.body.recruit.qa2.question_id)
 				const recruit = await new Recruit(req.body.recruit).save()
-				account.profile.recruit = recruit
-				console.log(account.profile.recruit.qa1)
-				await account.save()
+				account.profile.recruit = recruit._id
+				
+				// For some reason 'await account.save()' doesn't work
+				await Account.findByIdAndUpdate(account._id, {profile: account.profile})
 			}else{
 				// prevent pre-verifying
 				req.body.company.verified = false
@@ -51,9 +52,11 @@ const makeRouter = ({Account, Company, Recruit}) => {
 					users: []
 				}
 				const company = await new Company(req.body.company).save()
-				account.profile.company = company
-				await account.save()
-				await company.save()
+				account.profile.company = company._id
+				// await account.save()
+
+				// For some reason account.save() doesn't work
+				await Account.findByIdAndUpdate(account._id, {profile: account.profile})
 			}
 
 			return jsonResponse(res, 201, createApiToken(_id, ua))
