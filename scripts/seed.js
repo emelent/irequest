@@ -48,7 +48,7 @@ const mockRecruits = length => Array.apply(null, {length}).map(i => ({
 
 const mockAccounts = length => Array.apply(null, {length}).map(i => ({
 	email: faker.internet.email(),
-	password: 'asdf'	
+	password: hashPassword('asdf')
 }))
 
 const mockCompanies = length => Array.apply(null, {length}).map(i => ({
