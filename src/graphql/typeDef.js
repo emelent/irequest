@@ -24,12 +24,13 @@ type Question{
 }
 
 type Recruit {
+	_id: String!
 	name: String!
 	surname: String!
 	dob: String!
 	province: String!
 	city: String!
-	gender: Boolean!
+	gender: String!
 	disability: String
 	vid1_url: String!
 	vid2_url: String!
@@ -44,6 +45,7 @@ type CompanyAdmin {
 }
 
 type Company {
+	_id: ID!
 	name: String!
 	verified: Boolean!
 	industry_id: ID!
@@ -101,6 +103,7 @@ type Query {
 		disability: String
 		phone: String
 		dob: String
+		gender: String
 		industry_id: ID
 		min_age: Int
 		max_age: Int
@@ -170,10 +173,10 @@ type Mutation {
 		vid2_url: String!
 		dob: String!
 		industry_id: ID!
-		q1_id: ID
-		q1_response: String
-		q2_id: ID
-		q2_response: String
+		qa1_id: ID
+		qa1_response: String
+		qa2_id: ID
+		qa2_response: String
 		disability: String
 	): Recruit
 	update_recruit(
@@ -186,10 +189,10 @@ type Mutation {
 		vid2_url: String
 		dob: String
 		industry_id: ID
-		q1_id: ID
-		q1_response: String
-		q2_id: ID
-		q2_response: String
+		qa1_id: ID
+		qa1_response: String
+		qa2_id: ID
+		qa2_response: String
 		
 		disability: String		
 	): Recruit
