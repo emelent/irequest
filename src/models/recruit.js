@@ -2,17 +2,6 @@ import mongoose from  'mongoose'
 
 const {ObjectId} = mongoose.Schema.Types
 
-const QAR = new mongoose.Schema({
-	qa_id: {
-		type: ObjectId,
-		required: true
-	},
-	response: {
-		type: String,
-		required: true
-	}
-})
-
 const schema = new mongoose.Schema({
 	name: {
 		type: String,
@@ -22,6 +11,12 @@ const schema = new mongoose.Schema({
 		type: String,
 		required: true
 	},	
+	gender: {
+		type: String,
+		required: true,
+		lowercase: true,
+		default: "male"
+	},
 	province: {
 		type: String,
 		required: true
