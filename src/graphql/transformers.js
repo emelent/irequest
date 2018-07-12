@@ -17,6 +17,8 @@ export const gqlCompany = company => company
 export const gqlDocument = doc => doc
 export const gqlIndustry = industry => industry
 export const gqlRecruit = recruit => {
+	
+	recruit.age = new Date().getFullYear() - recruit.dob.getFullYear()
 	recruit.dob = recruit.dob.toDateString()
 	return recruit
 }

@@ -37,6 +37,7 @@ type Recruit {
 	industry_id: ID!
 	qa1: QA!
 	qa2: QA!
+	age: Int!
 }
 
 type CompanyAdmin {
