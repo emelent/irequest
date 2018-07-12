@@ -7,8 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-	"start": "babel-node scripts/server.dev.js",
-    "dev": "nodemon --exec babel-node scripts/server.dev.js --watch ./src",
+    "start": "nodemon --exec babel-node scripts/server.dev.js --watch ./src",
     "prod": "babel-node scripts/server.prod.js",
     "prep": "babel-node scripts/prepare.js",
     "seed": "babel-node scripts/seed.js",
