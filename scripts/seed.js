@@ -115,26 +115,26 @@ async function seed(){
 		// SEED THE DATA
 		// ======================
 		
-		// seed industries
+		// [BEGIN] seed industries
 		let industries = await Industry.create(mockIndustries(20))
 		console.log(`\t[+] ${industries.length} industries created.`)
-	
+		// [END]
 
-		// seed questions
+		// [BEGIN] seed questions
 		const q_data = mockQuestions(30).map(q => ({
 			question:  q.question,
 			industry_id: pickRandom(industries)._id
 		}))
 		const questions = await Question.create(q_data)
 		console.log(`\t[+] ${questions.length} questions created.`)
-		
+		// [END]
 
-		// seed system accounts
+		// [BEGIN] seed system accounts
 		const accounts = await Account.create(sysAccounts)
 		console.log(`\t[+] ${accounts.length} system accounts created.`)
+		// [END]
 
-
-		// seed company profiles and recruiter accounts
+		// [BEGIN] seed company profiles and recruiter accounts
 		const c_accounts = await Account.create(mockAccounts(10))
 		console.log(`\t[+] ${c_accounts.length} recruiter accounts created.`)
 
@@ -158,9 +158,9 @@ async function seed(){
 			await acc.save()
 		}
 		console.log(`\t[+] ${cprofiles.length} company profiles created.`)		
+		// [END]
 
-
-		// seed recruit profiles and recruit accounts
+		// [BEGIN] seed recruit profiles and recruit accounts
 		const r_accounts = await Account.create(mockAccounts(100))
 		console.log(`\t[+] ${r_accounts.length} recruit accounts created.`)
 		
@@ -188,7 +188,7 @@ async function seed(){
 			await acc.save()
 		}
 		console.log(`\t[+] ${rprofiles.length} recruit profiles created.`)
-
+		// [END]
 		
 		console.log(`\n[*] ${process.env.NODE_ENV.toString().toUpperCase()} database successfully seeded.`)
 	}  catch(err){
