@@ -41,7 +41,7 @@ const mockRecruits = length => Array.apply(null, {length}).map(i => ({
 	surname: faker.name.lastName(),
 	dob: randDate(1940, 2000),
 	province: pickRandom(provinces),
-	city: faker.address.city,
+	city: faker.address.city(),
 	gender: pickRandom(['male', 'female']),
 	disability: pickRandom(['blind', 'none','none', 'none']),
 	vid1_url: faker.image.food(),
