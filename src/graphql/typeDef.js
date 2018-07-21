@@ -106,13 +106,12 @@ type Query {
 		province: String
 		city: String
 		disability: String
-		phone: String
-		dob: String
 		gender: String
 		industry_id: ID
 		min_age: Int
 		max_age: Int
 	): [Recruit!]
+
 	industries(
 		name: String
 	): [Industry!]
