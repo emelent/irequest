@@ -114,9 +114,29 @@ export const getToken = (req) => req.get('authorization').split(' ')[1]
  */
 export const jsonResponse = (res, code, msg) => res.status(code).json(msg)
 
-export const isUser = ({access}) => access == 0
-export const isSysUser = (account) => {
-	console.log(account)
-	return account.access > 5
+// Removes undefined attributes in a object
+export const cleanObj = obj => {
+	for(let attr in obj){
+		if(obj[attr] === undefined)
+			delete obj[attr]
+	}
+	return obj
 }
+
+//==========
+// Some db search utils
+//==========
+
+export const currentYear = () => (new Date()).getFullYear()
+// Common RegExps
+export const regxStartsWith = text => new RegExp(`${text}$`, 'i')
+export const regxEndsWith = text  => new RegExp(`${text}$`, 'i')
+export const regxContains = text => new RegExp(text, 'i')
+export const regxCaseInsensitive = text => new RegExp(`^${text}$`, 'i')
+
+//===========
+// Some Account Checks
+//===========
+export const isUser = ({access}) => access == 0
+export const isSysUser = (account) => account.access > 5
 export const  isSysAdmin = ({access}) => access == 9
