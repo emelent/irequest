@@ -15,7 +15,8 @@
     "test:raw": "NODE_ENV=test tape -r babel-register -r babel-polyfill -r ./tests/config.js ./tests/**/*.spec.js",
     "cover": "istanbul cover npm run test:raw",
     "test:watch": "NODE_ENV=test nodemon --exec npm test -q -w ./src -w ./tests",
-    "lint": "eslint ./src"
+	"lint": "eslint ./src",
+	"bnode": "babel-node"
   },
   "keywords": [],
   "author": "",
