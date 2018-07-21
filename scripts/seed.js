@@ -27,10 +27,19 @@ const provinces = [
 	'KwaZulu Natal',
 	'That Other Province'
 ]
+
+const randDate = (minYear, maxYear) => {
+	maxYear = (!maxYear)? (new Date()).getFullYear() : maxYear
+	const year = minYear + Math.floor(Math.random() *  (maxYear - minYear))
+	const month = Math.floor(Math.random() * 12) + 1
+	const day = Math.floor(Math.random() * 31) + 1
+	return new Date([year, month, day].join('-'))
+}
+
 const mockRecruits = length => Array.apply(null, {length}).map(i => ({
 	name: faker.name.firstName(),
 	surname: faker.name.lastName(),
-	dob: faker.date.between(new Date(1960), new Date(2000)),
+	dob: randDate(1940, 2000),
 	province: pickRandom(provinces),
 	city: faker.address.city,
 	gender: pickRandom(['male', 'female']),
@@ -38,6 +47,7 @@ const mockRecruits = length => Array.apply(null, {length}).map(i => ({
 	vid1_url: faker.image.food(),
 	vid2_url: faker.image.animals(),
 	phone: faker.phone.phoneNumber(),
+	rsa: faker.random.boolean(),
 	qa1: {
 		response: faker.random.words()
 	},

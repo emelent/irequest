@@ -11,6 +11,10 @@ const schema = new mongoose.Schema({
 		type: String,
 		required: true
 	},	
+	rsa: {
+		type: Boolean,
+		required: true
+	},
 	gender: {
 		type: String,
 		required: true,
