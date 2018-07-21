@@ -1,9 +1,10 @@
 import {gqlRecruit} from '../transformers'
-import {inflateId, isHex24, getToken, validateToken, isSysUser} from '../../utils'
+import {inflateId, isHex24, getToken, validateToken, isSysUser, cleanObj, regxContains, currentYear, regxStartsWith} from '../../utils'
+import { filterRecruit } from '../filters';
 
 export default {
 	Query: {
-		recruit: async (parent, args, {req, Recruit, Account}) => {
+		recruit: async (parent, args, {req, Recruit}) => {
 			const account = req.account
 			if(!account.profile.recruit)
 				throw `Account has no linked recruit profile.`
@@ -11,7 +12,7 @@ export default {
 			const recruit = await Recruit.findById(account.profile.recruit)
 			return gqlRecruit(recruit)
 		},
-		recruits: async (parent, args, {req, Company, Recruit, Account}) => {
+		recruits: async (parent, args, {req, Company, Recruit}) => {
 			const account = req.account
 			if(!isSysUser(account)){
 				if(!account.profile.company)
@@ -33,15 +34,14 @@ export default {
 					response: args.qa2_response
 				}
 			}
-			const recruits = await Recruit.find(args)
-
-			// TODO implement filter by age
+			console.log(args)
+			const recruits = await Recruit.find(filterRecruit(args))
 
 			return recruits.map(gqlRecruit)
 		}
 	},
 	Mutation: {
-		create_recruit: async (parent,  args, {req, Account, Recruit})  => {
+		create_recruit: async (parent,  args, {req, Recruit})  => {
 			const account = req.account
 			if(account.profile.recruit)
 				throw  `Account already has a recruit profile.`
@@ -63,7 +63,7 @@ export default {
 			return gqlRecruit(recruit)
 		},
 
-		update_recruit: async (parent,  args, {req, Account, Recruit})  => {
+		update_recruit: async (parent,  args, {req, Recruit})  => {
 			const account = req.account
 			if(!account.profile.recruit)
 				throw  `Account has no recruit profile.`
@@ -72,7 +72,7 @@ export default {
 			return gqlRecruit(recruit)
 		},
 
-		remove_recruit: async (parent,  args, {req, Account, Recruit})  => {
+		remove_recruit: async (parent,  args, {req, Recruit})  => {
 			const account = req.account
 			if(!account.profile.recruit)
 				throw  `Account has no recruit profile.`
